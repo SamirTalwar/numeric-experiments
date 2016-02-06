@@ -1,8 +1,8 @@
 package com.noodlesandwich.numeric
 
+import com.noodlesandwich.numeric.DoubleMatchers.beNaN
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.{FunSpec, Matchers}
 
 @RunWith(classOf[JUnitRunner])
@@ -27,13 +27,5 @@ class SquareRootSpec extends FunSpec with Matchers {
     it("calculates the square root of a negative number as NaN") {
       SquareRoot(-3) should beNaN
     }
-  }
-
-  val beNaN: Matcher[Double] = new Matcher[Double] {
-    override def apply(actual: Double): MatchResult = MatchResult(
-      actual.isNaN,
-      s"expected $actual to be NaN",
-      s"expected $actual not to be NaN"
-    )
   }
 }
