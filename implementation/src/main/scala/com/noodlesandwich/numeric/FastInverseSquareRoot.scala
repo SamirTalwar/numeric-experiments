@@ -2,9 +2,14 @@ package com.noodlesandwich.numeric
 
 import sun.misc.Unsafe
 
+// Not thread-safe.
 object FastInverseSquareRoot {
   private val ThreeHalves = 1.5F
   private val SizeInBytes = 4L
+
+  private val transientStorage = unsafe.allocateMemory(SizeInBytes)
+
+  override def finalize(): Unit = unsafe.freeMemory(transientStorage)
 
   def apply(n: Float): Float = {
     if (n <= 0)
@@ -21,19 +26,13 @@ object FastInverseSquareRoot {
   }
 
   private def castToInt(value: Float): Int = {
-    val reference = unsafe.allocateMemory(SizeInBytes)
-    unsafe.putFloat(reference, value)
-    val result = unsafe.getInt(reference)
-    unsafe.freeMemory(reference)
-    result
+    unsafe.putFloat(transientStorage, value)
+    unsafe.getInt(transientStorage)
   }
 
   private def castToFloat(value: Int): Float = {
-    val reference = unsafe.allocateMemory(SizeInBytes)
-    unsafe.putInt(reference, value)
-    val result = unsafe.getFloat(reference)
-    unsafe.freeMemory(reference)
-    result
+    unsafe.putInt(transientStorage, value)
+    unsafe.getFloat(transientStorage)
   }
 
   private lazy val unsafe: Unsafe = {
