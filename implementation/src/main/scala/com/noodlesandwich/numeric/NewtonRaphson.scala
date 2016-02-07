@@ -4,8 +4,8 @@ class NewtonRaphson(f: Double => Double, fDerivative: Double => Double, epsilon:
   def iterate(x: Double): Double =
     x - f(x) / fDerivative(x)
 
-  def apply(x: Double): Double =
-    Stream.iterate(x)(iterate)
+  def apply(start: Double): Double =
+    Stream.iterate(start)(iterate)
       .sliding(2)
       .map { case Stream(a, b) => (a, b) }
       .dropWhile { case (a, b) => scala.math.abs(a - b) >= epsilon }

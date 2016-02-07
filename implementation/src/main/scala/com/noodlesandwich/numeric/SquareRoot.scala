@@ -5,6 +5,6 @@ object SquareRoot {
     if (n <= 0)
       return Double.NaN
 
-    new NewtonRaphson(x => x * x - n, x => 2 * x).apply(n)
+    new NewtonRaphson(x => x * x - n, x => 2 * x).apply(1)
   }
 }
